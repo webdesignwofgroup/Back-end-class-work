@@ -1,5 +1,5 @@
 import  jwt from "jsonwebtoken";
-import cohortfour from "../Model/usermodel.js"
+import CohortFour from "../Model/usermodel.js"
 import bcrypt from 'bcryptjs'
 
 
@@ -14,25 +14,25 @@ export const createstudents = async (req, res) => {
     }
     try {
 
-       const exist = await cohortfour.findOne({email});
+       const exist = await CohortFour.findOne({email});
         if (exist) return res.status(400).json({message:"Email Already Exist"})
     
 
  
 
 
-    const userNames = await cohortfour.findOne({UserName})
+    const userNames = await CohortFour.findOne({UserName})
     if (userNames) return res.status(400).json({message:"User Name Already Exist"})
 
     
-    const phoneNumbers = await cohortfour.findOne({phoneNumber})
+    const phoneNumbers = await CohortFour.findOne({phoneNumber})
     if (phoneNumbers) return res.status(400).json({message:"Phone Number Already Exist"})
 
 // Hash Password
      const salt = await bcrypt.genSalt(10);
         const hashPassword = await bcrypt.hash(password, salt);
 
-    const students = await cohortfour.create({
+    const students = await CohortFour.create({
         name,
         UserName, 
         email, 
@@ -54,7 +54,7 @@ export const createstudents = async (req, res) => {
     // GET ALL USERS
 export const getAllStudents = async(req, res) => {
     try { 
-        let student = await cohortfour.find().select
+        let student = await CohortFour.find().select
         ('-password')
         res.status(200).json(student)
     } catch (error) {
@@ -69,7 +69,7 @@ export const loginUser = async (req, res) =>{
 const {email, password} = req.body
 try {
     // check user exist
-const user = await cohortfour.findOne({email})
+const user = await CohortFour.findOne({email})
 if(!user) return res.status(404).json({message: "Email Dose Not Exist"})
     // compare password
 const isMatch = await bcrypt.compare(password, user.password)
@@ -97,7 +97,7 @@ user:{
 export const getUserById = async (req, res) =>{
 const userId = req.params.id
 try {
-    const user = await cohortfour.findById(userId).select
+    const user = await CohortFour.findById(userId).select
     ('-password')
     if(!user) return res.status(404).json({message:"User Not Found"})
         res.status(200).json(user)
@@ -112,7 +112,7 @@ export const updateUser = async (req, res) => {
     const {name, email, phoneNumber, password, country, state} 
     = req.body
 try {
-    let user = await cohortfour.findByIdAndUpdate(userId)
+    let user = await CohortFour.findByIdAndUpdate(userId)
     if(!user) return res.status(404).json({message:"user Not Found"})
 
         // Update Only Provided Fields
@@ -146,7 +146,7 @@ try {
 export const deleteUser = async (req, res) =>{
     const userId = req.params.id
     try {
-    const user = await cohortfour.findById(userId)
+    const user = await CohortFour.findById(userId)
     if (!user) return res.status(404).json({message:"user dosent exist"})
         await user.deleteOne()
     res.status(200).json({message:"user deleted successfully"})

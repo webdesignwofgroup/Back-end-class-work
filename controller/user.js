@@ -6,7 +6,7 @@ import bcrypt from 'bcryptjs'
 // Register User
 export const createstudents = async (req, res) => {
     const {
-        name, UserName, email, phoneNumber, password, country, state, address
+        name, UserName, email, phoneNumber, password, country, State, address
     } = req.body
 
      if (!password) {
@@ -39,7 +39,7 @@ export const createstudents = async (req, res) => {
         phoneNumber, 
         password:hashPassword, 
         country, 
-        state, 
+        State, 
         address
     })
     return res.status(201).json({
@@ -109,7 +109,7 @@ try {
 // Usuer Updadate 
 export const updateUser = async (req, res) => {
     let userId = req.params.id
-    const {name, email, phoneNumber, password, country, state} 
+    const {name,UserName, email, phoneNumber, password, country, State} 
     = req.body
 try {
     let user = await CohortFour.findByIdAndUpdate(userId)
@@ -117,11 +117,12 @@ try {
 
         // Update Only Provided Fields
         user.name = name || user.name
+        user.UserName= UserName|| user.UserName
         user.email = email || user.email
         user.phoneNumber = phoneNumber || user.phoneNumber
         user.password = password || user.password
         user.country = country || user.country
-        user.state = state || user.state
+        user.State = State || user.State
         await user.save()
     res.status(200).json({
 
@@ -132,7 +133,7 @@ try {
             email:user.email,
             phoneNumber:user.phoneNumber,
             country:user.country,
-            state:user.state
+            State:user.State
         }
     })
 } catch (error) {

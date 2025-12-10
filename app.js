@@ -1,28 +1,36 @@
 import dotenv from 'dotenv';
-import express from 'express'
-import { mongoose } from "mongoose";
-import userRouter from "../Back End class-work/Route/User.js"
+import express from 'express';
+import { mongoose } from 'mongoose';
+import userRouter from '../Back End class-work/Route/User.js';
+import productRouter from './Route/Product.js';
 
-const app = express()
+dotenv.config();
+
+const app = express();
 app.use(express.json());
-    dotenv.config()
 
-console.log('my name is Emma')
+console.log('my name is Emma');
 
-app.get('/',(req, res)=>{
-    res.send('Hello Queen')
-} )
+// Test route
+app.get('/', (req, res) => {
+    res.send('Hello Queen');
+});
 
-app.listen(3000, () => {
-    console.log(`backend is running in port ${process.env.PORT}`)
-})
-app.use('/api/users', userRouter)
+// Mount routes BEFORE listen()
+app.use('/api/users', userRouter);
+app.use('/api/product', productRouter);
+console.log("Product route mounted at /api/product");   // <-- Add this
 
+// Connect to MongoDB
 mongoose.connect(process.env.MONOGODB_URL)
-.then(() => {
-    console.log("connected to my database Emma")
-}).catch(() =>{
-    console.log('Fail to connect to database')
-})
+    .then(() => {
+        console.log("connected to my database Emma");
+    })
+    .catch(() => {
+        console.log('Fail to connect to database');
+    });
 
-
+// Start the server LAST
+app.listen(3000, () => {
+    console.log("backend is running on port 3000");
+});

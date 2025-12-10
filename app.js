@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import express from 'express';
 import { mongoose } from 'mongoose';
-import userRouter from '../Back End class-work/Route/User.js';
+import userRouter from './Route/User.js';
 import productRouter from './Route/Product.js';
 
 dotenv.config();
